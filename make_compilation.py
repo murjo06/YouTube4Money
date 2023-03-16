@@ -16,7 +16,7 @@ for file in os.listdir(config.DOWNLOAD_PATH):
     clips.append(VideoFileClip(config.DOWNLOAD_PATH + os.sep + file))
 while duration < MAX_DURATION - TOLERANCE:
     rand = random.randint(0, len(clips) -1)
-    if clips[rand].duration + duration < MAX_DURATION and not (config.inList(rand, usedRandoms)):
+    if clips[rand].duration + duration < MAX_DURATION and not (rand in usedRandoms):
         if maxHeight < clips[rand].h:
             maxHeight = clips[rand].h
         duration += clips[rand].duration
@@ -26,11 +26,11 @@ while duration < MAX_DURATION - TOLERANCE:
         break
 if maxHeight > config.MAX_HEIGHT:
     maxHeight = config.MAX_HEIGHT
-i = 0
+finalClips = []
 for clip in usedClips:
     width = round(config.ASPECT_RATIO * maxHeight)
     if width % 2 == 1:
         width += 1
-    usedClips[i] = clip.resize((width, maxHeight))
-finalClip = concatenate_videoclips(usedClips, method="compose")
+    finalClips.append(clip.resize((width, maxHeight)))
+finalClip = concatenate_videoclips(finalClips, method="compose")
 finalClip.write_videofile(filename="compilation.mp4", codec="libx264", audio_codec="aac")
