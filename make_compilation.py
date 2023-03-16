@@ -33,4 +33,4 @@ for clip in usedClips:
         width += 1
     finalClips.append(clip.resize((width, maxHeight)))
 finalClip = concatenate_videoclips(finalClips, method="compose")
-finalClip.write_videofile(filename="compilation.mp4", codec="libx264", audio_codec="aac")
+finalClip.write_videofile(filename="compilation.mp4", codec="libx264", audio_codec="aac", audio=True)
