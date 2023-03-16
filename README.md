@@ -1,2 +1,2 @@
 # YouTube4Money
- A bot that uploads YouTube shorts
+A bot that uploads YouTube shorts
