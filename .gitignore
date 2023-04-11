@@ -2,3 +2,4 @@ config.py
 *.mp4
 counter.txt
 *.json
+node_modules

@@ -1,1 +1,0 @@
-python3 upload_video.py --file="compilation.mp4" --title="Fine memes" --description=":)" --keywords="memes" --category="23" --privacyStatus="private" --noauth_local_webserver

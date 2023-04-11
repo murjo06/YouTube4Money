@@ -1,8 +1,6 @@
-google_api_python_client
-google_auth_oauthlib
 instaloader
 instalooter
 moviepy
-protobuf
-python_dateutil
-schedule
+selenium
+colorama
+praw
