@@ -2,6 +2,7 @@ import scrape_instagram
 import scrape_reddit
 import make_compilation
 import upload_selenium
+import memes_indexer
 import time
 import config
 from colorama import Fore
@@ -13,16 +14,19 @@ TIME_BETWEEN_UPLOADS = 0.5 * 24 * 60 * 60
 
 def main():
     while True:
-        print(Fore.GREEN + "Scraping Instagram" + Fore.RESET)
-        old_stdout = sys.stdout
-        sys.stdout = open(os.devnull, "w")
-        scrape_instagram.scrapeInstagram(username = config.USERNAME)
-        sys.stdout = old_stdout
-        print(Fore.GREEN + "Scraping Reddit" + Fore.RESET)
-        old = sys.stdout
-        sys.stdout = open(os.devnull, "w")
-        scrape_reddit.scrapeReddit()
-        sys.stdout = old
+        memes_indexer.deleteMemes()
+        if config.USE_INSTAGRAM:
+            print(Fore.GREEN + "Scraping Instagram" + Fore.RESET)
+            old_stdout = sys.stdout
+            sys.stdout = open(os.devnull, "w")
+            scrape_instagram.scrapeInstagram(username = config.USERNAME)
+            sys.stdout = old_stdout
+        if config.USE_REDDIT:
+            print(Fore.GREEN + "Scraping Reddit" + Fore.RESET)
+            old = sys.stdout
+            sys.stdout = open(os.devnull, "w")
+            scrape_reddit.scrapeReddit()
+            sys.stdout = old
         for i in range(round(TIME_BETWEEN_SCRAPES / TIME_BETWEEN_UPLOADS)):
             print(Fore.GREEN + "Making compilation" + Fore.RESET)
             boomer = sys.stdout

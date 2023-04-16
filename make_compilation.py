@@ -1,5 +1,5 @@
 import os
-from moviepy.editor import VideoFileClip, concatenate_videoclips
+from moviepy.editor import VideoFileClip, concatenate_videoclips, CompositeVideoClip, ImageClip, VideoClip
 import random
 import config
 
@@ -15,8 +15,8 @@ def makeCompilation():
     for file in os.listdir(config.DOWNLOAD_PATH):
         clips.append(VideoFileClip(config.DOWNLOAD_PATH + os.sep + file))
     while duration < MAX_DURATION - TOLERANCE:
-        rand = random.randint(0, len(clips) -1)
-        if clips[rand].duration + duration < MAX_DURATION and not (rand in usedRandoms):
+        rand = random.randint(0, len(clips) - 1)
+        if clips[rand].duration + duration < MAX_DURATION and not (rand in usedRandoms) and (clips[rand].w / clips[rand].h >= config.ASPECT_RATIO_LIMIT):
             if maxHeight < clips[rand].h:
                 maxHeight = clips[rand].h
             duration += clips[rand].duration
@@ -26,12 +26,20 @@ def makeCompilation():
             break
     if maxHeight > config.MAX_HEIGHT:
         maxHeight = config.MAX_HEIGHT
+    actualClips = []
     finalClips = []
     for clip in usedClips:
-        width = round(config.ASPECT_RATIO * maxHeight)
-        if width % 2 == 1:
-            width += 1
-        finalClips.append(clip.resize((width, min(config.MAX_HEIGHT, clip.h))))
-    finalClip = concatenate_videoclips(finalClips, method="compose")
-    finalClip.write_videofile(filename=config.OUTPUT_PATH, codec="libx264", audio_codec="aac", audio=True)
+        ratio = clip.w / clip.h
+        if ratio >= 1:
+            actualClips.append(clip.resize(width = config.ASPECT_RATIO * config.MAX_HEIGHT))
+        else:
+            actualClips.append(clip.resize(height = config.MAX_HEIGHT))
+    finalClip = concatenate_videoclips(actualClips, method = "compose")
+    background = ImageClip("background.png")
+    writeClip = CompositeVideoClip([background, finalClip.set_position("center")])
+    writeClip = writeClip.set_start(0).set_duration(finalClip.duration)
+    writeClip.write_videofile(filename = config.OUTPUT_PATH, codec = "libx264", audio_codec = "aac", audio = True, remove_temp = True, threads = 8)
     return config.OUTPUT_PATH
+
+if __name__ == "__main__":
+    makeCompilation()

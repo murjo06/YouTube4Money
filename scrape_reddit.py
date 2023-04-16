@@ -1,3 +1,4 @@
+import memes_indexer
 import praw
 import config
 import subprocess
@@ -16,4 +17,8 @@ def scrapeReddit():
                 process.wait()
                 sys.stdout = old
                 posts.append(f"{submission.title} @ {submission.url}")
+    memes_indexer.indexMemes()
     return posts
+
+if __name__ == "__main__":
+    scrapeReddit()

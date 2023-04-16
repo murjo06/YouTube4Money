@@ -1,5 +1,6 @@
 config.py
 *.mp4
-counter.txt
 *.json
-node_modules
+*.png
+downloaded_memes/*.*
+*.log

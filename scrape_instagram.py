@@ -1,7 +1,6 @@
 from datetime import timedelta, date, datetime
 import instaloader
 import config
-import os
 import memes_indexer
 
 USERNAME = config.USERNAME
@@ -9,8 +8,6 @@ PROFILES = config.PROFILES
 PATH = config.DOWNLOAD_PATH
 
 def scrapeInstagram(username, days = 1):
-    for file in os.listdir(PATH):
-        os.remove(PATH + os.sep + file)
     dateLocal = date.today() - timedelta(days = days)
     print("Starting Scraping")
     instaLoader = instaloader.Instaloader()

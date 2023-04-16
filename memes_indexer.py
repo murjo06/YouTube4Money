@@ -11,5 +11,9 @@ def indexMemes():
         os.rename(f"{config.DOWNLOAD_PATH}{os.sep}{file}", f"{config.DOWNLOAD_PATH}{os.sep}{index}.mp4")
         index += 1
 
+def deleteMemes():
+    for file in os.listdir(config.DOWNLOAD_PATH):
+        os.remove(f"{config.DOWNLOAD_PATH}{os.sep}{file}")
+
 if __name__ == "__main__":
     indexMemes()
